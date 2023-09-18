@@ -1,0 +1,22 @@
+{
+    "name": "Leetcode1",
+    "version": "0.7.7",
+    "description": "This is For Leetcode",
+    "permissions": ["storage", "unlimitedStorage"],
+    "browser_action": {
+      "default_popup": "dist/index.html"
+    },
+    "manifest_version": 2, 
+    "content_scripts": [
+        {
+          "css": ["dist/style.css"], 
+          "js": ["/dist/main.js"],
+          "matches": [
+            "https://leetcode.com/*"
+          ]
+        }
+      ], 
+    "icons": {
+      "96": "/assets/logo.png"
+    }
+}

@@ -1,0 +1,19 @@
+.highLight{
+
+    /* border:2px solid red !important; */
+    font-size: 13px !important;
+    height: 25px;
+    width: 75px;
+    position: absolute;
+    top: 53px;
+    left: 110px;
+    background: #333;
+    z-index: 10000000;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.highLight:hover{
+    background-color: rgb(77, 76, 76);
+}
