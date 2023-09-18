@@ -34,7 +34,7 @@ class EditorialData{
 
 
         const url=this.googleSheetAPI.getUrl("A:A")
-        console.log(url)
+        
         let response = await fetch(url)
         const data=await response.json()
         // console.log(data["values"][1][11]);
@@ -55,7 +55,8 @@ class EditorialData{
         let response = await fetch(url)
         const data=await response.json()
       
-        console.log(data)
+        console.log(data['values'][0][10])
+        return data
       
       
       }
@@ -70,4 +71,4 @@ class EditorialData{
 
 const test=new EditorialData()
 
-test.getEditorial("2527")
+test.getEditorial("1337")

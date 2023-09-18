@@ -5,6 +5,8 @@ class EditorialElement{
         this.elementArray=[]
 
         this.checkCount=0
+
+        this.problemId=2
     }
 
     injectEditorialButton(){
@@ -15,7 +17,7 @@ class EditorialElement{
 
         button.classList.add("highLight")
         button.innerText="Editorial"
-        console.log(button)
+      
 
         document.body.appendChild(button)
 
@@ -26,35 +28,56 @@ class EditorialElement{
 
         const editBtn1=document.getElementsByClassName("highLight")
         const editBtn=[...editBtn1]
-        if(editBtn.length==0){
+        if(editBtn.length==0 && this.checkCount<5 ){
             window.setTimeout(()=>{
             this.getEditorialButton()
+            this.checkCount+=1
             },150)
        
         }
         else{
         
-            console.log(editBtn[0])
+            // console.log(editBtn[0])
             editBtn[0].addEventListener('click',(e)=>{
-                console.log("Button Clicked")
+
+                const element=document.getElementsByClassName("probCnt")
+
+                if([...element].length>0){
+                    console.log("Found The Element")
+                    if([...element][0].classList.contains("hide")){
+                        [...element][0].classList.remove("hide")
+
+                    }
+                    else{
+                        [...element][0].classList.add("hide")
+
+                    }
+
+
+                }
+                else{
+                    console.log("Did not find the elmement")
+                    this.getproblemId()
+                }
+
+
+
+             
+                
+               
 
             })
            
         }
     }
 
-
-
-
-    
-
-
-
-
-    getproblemId(){
+   async getproblemId(){
         const textElement1=document.getElementsByClassName("text-title-large")
+        // const textElement1=document.getElementsByClassName("text-lg")
+        console.log(textElement1)
         const textElement=[...textElement1]
         if(textElement.length==0){
+            
             window.setTimeout(()=>{
             this.getproblemId()
             },150)
@@ -62,7 +85,13 @@ class EditorialElement{
         }
         else{
         
-            console.log(textElement[0].firstChild.textContent.split(".")[0])
+            // console.log(textElement[0].firstChild.textContent.split(".")[0])
+
+            await init(textElement[0].firstChild.textContent.split(".")[0])
+
+            // this.problemId=textElement[0].firstChild.textContent.split(".")[0]
+
+            return textElement[0].firstChild.textContent.split(".")[0]
            
         }
     }
@@ -72,9 +101,191 @@ class EditorialElement{
 
 
 
-const editElement=new EditorialElement()
 
-editElement.getproblemId()
-editElement.getEditorialButton()
-editElement.injectEditorialButton()
+
+
+
+
+class GoogleSheetAPIHandler{
+    constructor(){
+
+
+    }
+    static API_KEY =  "AIzaSyA0y-pcsUGMqoHP49hznVSnDQ2K77JqcoM"
+    static SHEETS_ID =  "1v0ofcKPVSvjs50htyI59BLt1J9e1i8dPk8ULd492uiU"
+
+    getUrl(range){
+        return `https://sheets.googleapis.com/v4/spreadsheets/${GoogleSheetAPIHandler.SHEETS_ID}/values/${range}?key=${GoogleSheetAPIHandler.API_KEY}`
+    }
+
+}
+
+class EditorialData{
+    constructor(){
+        this.problemMap={}
+        this.googleSheetAPI=new GoogleSheetAPIHandler()
+    }
+
+   async mappingProblemID(){
+
+    const data=await this.getProblemIds()
+
+    for (let i = 1; i < data.length; i++) {
+      const id =data[i]
+      this.problemMap[id] = i+1;
+    }
+    }
+
+    async getProblemIds(){
+
+
+        const url=this.googleSheetAPI.getUrl("A:A")
+        console.log(url)
+        let response = await fetch(url)
+        const data=await response.json()
+        // console.log(data["values"][1][11]);
+        // console.log( data)
+
+    
+         return data["values"]
+    
+    }
+
+    async getEditorial(problemId){
+        await this.mappingProblemID()
+        const problemIds=problemId in this.problemMap ? this.problemMap[problemId]:2;
+
+        const range=`A${problemIds}:L${problemIds}`
+      
+        const url=this.googleSheetAPI.getUrl(range)
+        let response = await fetch(url)
+        const data=await response.json()
+      
+        console.log(data)
+        return data
+      
+      
+      }
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+class EditorialContent{
+    constructor(){
+        this.parent=document.body
+
+    }
+
+   async buildProblemContent(data){
+        // console.log("HellofromConttent Builder")
+        // const data=await getDataFunc()
+        
+        const problem=data['values'][0][11]
+        
+
+        const problemContent=document.createElement("div")
+
+        // problemContent.innerHTML=problem
+
+        problemContent.innerHTML=problem
+
+        problemContent.classList.add("probCnt")
+
+        document.body.appendChild(problemContent)
+
+        console.log(problemContent)
+
+    }
+    buildSolutionContent(){
+
+
+    }
+    
+
+}
+
+
+
+
+
+
+
+
+
+// const editElement=new EditorialElement()
+
+// editElement.getproblemId()
+// const showContent=new EditorialContent()
+// editElement.injectEditorialButton()
+
+// editElement.getEditorialButton()
+
+// const test=new EditorialData()
+
+
+// test.getEditorial("2527")
+
+
+
+
+//  await showContent.buildProblemContent()
+
+ async function init(problemId){
+    // const problemId=editElement.getproblemId()
+
+    const test=new EditorialData()
+    const showContent=new EditorialContent()
+
+    
+    const data=await test.getEditorial(problemId)
+    await showContent.buildProblemContent(data)
+
+ }
+
+ 
+
+ function main(){
+    // console.log(window.location.href)
+    // console.log(window.location.href.includes("https://leetcode.com/problems"))
+    // console.log(window.location.href!="https://leetcode.com/problemset/all/")
+    // console.log(window.location.href.includes("https://leetcode.com/problems") && window.location.href!="https://leetcode.com/problemset/all/")
+
+
+
+
+    const editElement=new EditorialElement()
+
+    if(window.location.href.includes("https://leetcode.com/problems") && window.location.href!="https://leetcode.com/problemset/all/"){
+
+    window.setTimeout(()=>{
+        editElement.injectEditorialButton()
+
+        editElement.getEditorialButton()
+
+    },800)
+
+
+        
+
+    }
+
+
+
+
+
+
+ }
+
+ main()
+
 

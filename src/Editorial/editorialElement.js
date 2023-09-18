@@ -45,6 +45,12 @@ class EditorialElement{
 
 
 
+
+    
+
+
+
+
     getproblemId(){
         const textElement1=document.getElementsByClassName("text-title-large")
         const textElement=[...textElement1]
@@ -61,6 +67,8 @@ class EditorialElement{
         }
     }
 }
+
+
 
 
 
