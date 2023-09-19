@@ -1,4 +1,91 @@
 
+//Storage Reference Not for actual Usage
+
+const storage = chrome.storage.local;
+
+const problemId="10"
+
+storage.set({ [problemId]: "valueasdfasds" }).then(() => {
+    console.log("Value is set");
+  });
+  
+  storage.get([problemId]).then((result) => {
+    console.log("Value currently is " + result[problemId]);
+  }).catch((e)=>{
+    console.log(e)
+
+  })
+
+
+
+  async function init(problemId){
+    // const problemId=editElement.getproblemId()
+
+    const test=new EditorialData()
+    const showContent=new EditorialContent()
+
+    
+    const data=await test.getEditorial(problemId)
+    await showContent.buildProblemContent(data)
+
+ }
+
+
+
+
+
+
+  class localStorage{
+    constructor(){
+        this.editorialData=new EditorialData()
+
+        this.storage=chrome.storage.local
+
+    }
+
+    async saveEditorial(problemId){
+        try{
+            const data=await this.editorialData.getEditorial(problemId)
+
+            const solution=data['values'][0][11]
+    
+            await this.storage.set({ [problemId]: solution })
+
+        }
+        catch(e){
+            
+            return "Error"
+
+        }
+
+    }
+
+    async retriveEditorial(problemId){
+
+        try{
+
+        }
+        catch(e){
+            return "SomeThing is Wrong"
+        }
+
+    }
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
 class EditorialElement{
 
     constructor(){
@@ -240,24 +327,15 @@ class EditorialContent{
 
 //  await showContent.buildProblemContent()
 
- async function init(problemId){
-    // const problemId=editElement.getproblemId()
 
-    const test=new EditorialData()
-    const showContent=new EditorialContent()
-
-    
-    const data=await test.getEditorial(problemId)
-    await showContent.buildProblemContent(data)
-
- }
 
  
 
  function main(){
     // console.log(window.location.href)
     // console.log(window.location.href.includes("https://leetcode.com/problems"))
-    // console.log(window.location.href!="https://leetcode.com/problemset/all/")
+    // console.log(window.location.href==="https://leetcode.com/problemset/all/")
+    // console.log(window.location.href.includes("https://leetcode.com/problemset/all/"))
     // console.log(window.location.href.includes("https://leetcode.com/problems") && window.location.href!="https://leetcode.com/problemset/all/")
 
 
@@ -265,7 +343,7 @@ class EditorialContent{
 
     const editElement=new EditorialElement()
 
-    if(window.location.href.includes("https://leetcode.com/problems") && window.location.href!="https://leetcode.com/problemset/all/"){
+    if(window.location.href.includes("https://leetcode.com/problems") && !window.location.href.includes("https://leetcode.com/problemset/all/")){
 
     window.setTimeout(()=>{
         editElement.injectEditorialButton()
@@ -287,5 +365,6 @@ class EditorialContent{
  }
 
  main()
+
 
 
