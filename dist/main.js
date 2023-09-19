@@ -5,16 +5,16 @@ const storage = chrome.storage.local;
 
 const problemId="10"
 
-storage.set({ [problemId]: "valueasdfasds" }).then(() => {
-    console.log("Value is set");
-  });
+// storage.set({ [problemId]: "valueasdfasds" }).then(() => {
+//     console.log("Value is set");
+//   });
   
-  storage.get([problemId]).then((result) => {
-    console.log("Value currently is " + result[problemId]);
-  }).catch((e)=>{
-    console.log(e)
+//   storage.get([problemId]).then((result) => {
+//     console.log("Value currently is " + result[problemId]);
+//   }).catch((e)=>{
+//     console.log(e)
 
-  })
+//   })
 
 
 
@@ -29,165 +29,6 @@ storage.set({ [problemId]: "valueasdfasds" }).then(() => {
     await showContent.buildProblemContent(data)
 
  }
-
-
-
-
-
-
-  class localStorage{
-    constructor(){
-        this.editorialData=new EditorialData()
-
-        this.storage=chrome.storage.local
-
-    }
-
-    async saveEditorial(problemId){
-        try{
-            const data=await this.editorialData.getEditorial(problemId)
-
-            const solution=data['values'][0][11]
-    
-            await this.storage.set({ [problemId]: solution })
-
-        }
-        catch(e){
-            
-            return "Error"
-
-        }
-
-    }
-
-    async retriveEditorial(problemId){
-
-        try{
-
-        }
-        catch(e){
-            return "SomeThing is Wrong"
-        }
-
-    }
-
-
-
-
-
-  }
-
-
-
-
-
-
-
-
-
-
-class EditorialElement{
-
-    constructor(){
-        this.elementArray=[]
-
-        this.checkCount=0
-
-        this.problemId=2
-    }
-
-    injectEditorialButton(){
-
-        
-
-        let button=document.createElement("div")
-
-        button.classList.add("highLight")
-        button.innerText="Editorial"
-      
-
-        document.body.appendChild(button)
-
-        
-    }
-
-    getEditorialButton(){
-
-        const editBtn1=document.getElementsByClassName("highLight")
-        const editBtn=[...editBtn1]
-        if(editBtn.length==0 && this.checkCount<5 ){
-            window.setTimeout(()=>{
-            this.getEditorialButton()
-            this.checkCount+=1
-            },150)
-       
-        }
-        else{
-        
-            // console.log(editBtn[0])
-            editBtn[0].addEventListener('click',(e)=>{
-
-                const element=document.getElementsByClassName("probCnt")
-
-                if([...element].length>0){
-                    console.log("Found The Element")
-                    if([...element][0].classList.contains("hide")){
-                        [...element][0].classList.remove("hide")
-
-                    }
-                    else{
-                        [...element][0].classList.add("hide")
-
-                    }
-
-
-                }
-                else{
-                    console.log("Did not find the elmement")
-                    this.getproblemId()
-                }
-
-
-
-             
-                
-               
-
-            })
-           
-        }
-    }
-
-   async getproblemId(){
-        const textElement1=document.getElementsByClassName("text-title-large")
-        // const textElement1=document.getElementsByClassName("text-lg")
-        console.log(textElement1)
-        const textElement=[...textElement1]
-        if(textElement.length==0){
-            
-            window.setTimeout(()=>{
-            this.getproblemId()
-            },150)
-       
-        }
-        else{
-        
-            // console.log(textElement[0].firstChild.textContent.split(".")[0])
-
-            await init(textElement[0].firstChild.textContent.split(".")[0])
-
-            // this.problemId=textElement[0].firstChild.textContent.split(".")[0]
-
-            return textElement[0].firstChild.textContent.split(".")[0]
-           
-        }
-    }
-}
-
-
-
-
-
 
 
 
@@ -227,7 +68,7 @@ class EditorialData{
 
 
         const url=this.googleSheetAPI.getUrl("A:A")
-        console.log(url)
+        // console.log(url)
         let response = await fetch(url)
         const data=await response.json()
         // console.log(data["values"][1][11]);
@@ -248,7 +89,7 @@ class EditorialData{
         let response = await fetch(url)
         const data=await response.json()
       
-        console.log(data)
+        // console.log(data)
         return data
       
       
@@ -290,10 +131,23 @@ class EditorialContent{
 
         document.body.appendChild(problemContent)
 
-        console.log(problemContent)
+        // console.log(problemContent)
 
     }
-    buildSolutionContent(){
+   async buildSolutionContent(solution){
+
+    const solutionContent=document.createElement("div")
+
+    solutionContent.innerHTML=solution
+
+    solutionContent.classList.add("probCnt")
+
+    document.body.appendChild(solutionContent)
+
+
+
+
+
 
 
     }
@@ -331,7 +185,179 @@ class EditorialContent{
 
  
 
- function main(){
+
+
+
+
+ class LocalStorage{
+    constructor(){
+        this.editorialData=new EditorialData()
+
+        this.storage=chrome.storage.local
+
+    }
+
+    async saveEditorial(problemId){
+        try{
+            const data=await this.editorialData.getEditorial(problemId)
+
+            const solution=data['values'][0][11]
+    
+            await this.storage.set({ [problemId]: solution })
+
+        }
+        catch(e){
+            
+            return "Error"
+
+        }
+
+    }
+
+    async retrieveEditorial(problemId){
+
+        try{
+           const result= await storage.get([problemId])
+
+
+           console.log(`Retrieved Data for problemId ${problemId} is ${result[problemId]}`)
+
+            return result[problemId]
+
+        }
+        catch(e){
+            return "SomeThing is Wrong"
+        }
+
+    }
+
+  }
+
+
+//   const experiment=new LocalStorage()
+
+//   experiment.saveEditorial("1")
+
+//   experiment.retrieveEditorial("1")
+
+
+
+  class EditorialElement{
+
+    constructor(){
+        this.elementArray=[]
+
+        this.checkCount=0
+
+        this.problemId=2
+        this.localStorage=new LocalStorage()
+
+        this.editorialContent=new EditorialContent()
+    }
+
+    injectEditorialButton(){
+
+        
+
+        let button=document.createElement("div")
+
+        button.classList.add("highLight")
+        button.innerText="Editorial"
+      
+
+        document.body.appendChild(button)
+
+        
+    }
+
+    getEditorialButton(){
+
+        const editBtn1=document.getElementsByClassName("highLight")
+        const editBtn=[...editBtn1]
+        if(editBtn.length==0 && this.checkCount<5 ){
+            window.setTimeout(()=>{
+            this.getEditorialButton()
+            this.checkCount+=1
+            },150)
+       
+        }
+        else{
+        
+            // console.log(editBtn[0])
+            editBtn[0].addEventListener('click',async (e)=>{
+
+                const element=document.getElementsByClassName("probCnt")
+
+                if([...element].length>0){
+                    console.log("Found The Element")
+                    if([...element][0].classList.contains("hide")){
+                        [...element][0].classList.remove("hide")
+
+                    }
+                    else{
+                        [...element][0].classList.add("hide")
+
+                    }
+
+
+                }
+                else{
+                    console.log("Did not find the elmement")
+                    // this.getproblemId()
+
+                    console.log(this.problemId)
+
+                    const solution=await this.localStorage.retrieveEditorial(this.problemId)
+
+                    this.editorialContent.buildSolutionContent(solution)
+
+
+                }
+
+
+
+             
+                
+               
+
+            })
+           
+        }
+    }
+
+   async getproblemId(){
+        const textElement1=document.getElementsByClassName("text-title-large")
+        // const textElement1=document.getElementsByClassName("text-lg")
+        // console.log(textElement1)
+        const textElement=[...textElement1]
+        if(textElement.length==0){
+            
+            window.setTimeout(()=>{
+            this.getproblemId()
+            },150)
+       
+        }
+        else{
+        
+            // console.log(textElement[0].firstChild.textContent.split(".")[0])
+
+            // await init(textElement[0].firstChild.textContent.split(".")[0])
+
+            this.problemId=textElement[0].firstChild.textContent.split(".")[0]
+
+            await this.localStorage.saveEditorial(textElement[0].firstChild.textContent.split(".")[0])
+
+
+
+            // this.problemId=textElement[0].firstChild.textContent.split(".")[0]
+
+            return textElement[0].firstChild.textContent.split(".")[0]
+           
+        }
+    }
+}
+
+function main(){
     // console.log(window.location.href)
     // console.log(window.location.href.includes("https://leetcode.com/problems"))
     // console.log(window.location.href==="https://leetcode.com/problemset/all/")
@@ -349,6 +375,7 @@ class EditorialContent{
         editElement.injectEditorialButton()
 
         editElement.getEditorialButton()
+        editElement.getproblemId()
 
     },800)
 
@@ -365,6 +392,3 @@ class EditorialContent{
  }
 
  main()
-
-
-
