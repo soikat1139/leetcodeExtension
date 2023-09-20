@@ -2,9 +2,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Cantarell&family=Comforter+Brush&display=swap');
 
 
-*{
+body{
     box-sizing: border-box;
     background-color: rgb(38 38 38);
+    margin: 0PX;
+    padding: 0PX;
 
 }
 
