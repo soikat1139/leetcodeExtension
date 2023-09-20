@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Comforter+Brush&family=Cormorant+Garamond&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cantarell&family=Comforter+Brush&display=swap');
+
+
+*{
+    box-sizing: border-box;
+    background-color: rgb(38 38 38);
+
+}
+
+/* Main Container */
+.container{
+    width: 320px;
+    height: 580px;
+    /* background-color: #ffffff; */
+    
+
+}
+
+
+
+
+
+
+
+/* Heading */
+.heading{
+    display: flex;
+    flex-direction: row;
+    /* font-family: 'Cormorant Garamond', serif; */
+    font-family: 'Cantarell', sans-serif;
+    justify-content: flex-start;
+    align-items: center;
+    width: 320px;
+    height: 45px;
+    /* border:2px solid red; */
+    border-bottom: 1px solid rgb(235, 193, 193);
+    
+    font-weight: 400;
+    background-color: #313131;
+    border-radius: 5px;
+    cursor: pointer;
+
+}
+
+.heading svg{
+   
+    /* border: 2px solid red; */
+    width: 60px;
+    margin-left: 8px;
+    background-color: #313131;
+  
+}
+.headingText{
+   
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #313131;
+    color: #fff;
+}
+
+#title{
+    color: #05b68d;
+    background-color: #313131;
+
+}
+
+
+/* Option Section */
+
+
+.options{
+
+
+    height: 320px;
+
+    /* border:2px solid red; */
+
+
+
+
+
+
+}
+
+/* Sign Up Section */
+
+.signUp{
+    border-top:1px solid rgb(235, 193, 193);
+    padding: 2px;
+}
+
+
+
+.hding{
+    color: #fff;
+    font-family: 'Cantarell', sans-serif;
+    font-size: 15px;
+    margin-left: 20px;
+
+}
+
+.items{
+    color: #fff;
+    font-family: 'Cantarell', sans-serif;
+    font-size: 15px;
+    margin-left: 20px;
+    display: flex;
+    flex-direction:row ;
+    
+}
+.items svg{
+    fill:#05b68d;
+    margin-right: 8px;
+}
+
+
+.btn{
+    color: #fff;
+    font-family: 'Cantarell', sans-serif;
+    font-size: 15px;
+    margin-top: 5px;
+    margin-left: 22px;
+    height: 28px;
+    background-color: #05b68d;
+    width: 200px;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+
+}
